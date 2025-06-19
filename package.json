@@ -1,0 +1,24 @@
+{
+  "name": "chordkeeper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests\"",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "chordsheetjs": "^12.3.0",
+    "express": "^5.1.0",
+    "tonal": "^6.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

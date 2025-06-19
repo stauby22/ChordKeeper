@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChordKeeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <h1>ChordKeeper</h1>
+            <div class="search-container">
+                <input type="search" id="search-input" placeholder="Search songs...">
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="controls">
+                <div class="transpose-controls">
+                    <button id="transpose-down">♭</button>
+                    <select id="key-selector">
+                        <option value="C">C</option>
+                        <option value="C#">C#</option>
+                        <option value="D">D</option>
+                        <option value="Eb">Eb</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="F#">F#</option>
+                        <option value="G">G</option>
+                        <option value="Ab">Ab</option>
+                        <option value="A">A</option>
+                        <option value="Bb">Bb</option>
+                        <option value="B">B</option>
+                    </select>
+                    <button id="transpose-up">♯</button>
+                </div>
+                
+                <button id="toggle-chords">Toggle Chords</button>
+            </div>
+
+            <div id="song-display" class="song-container show-chords"></div>
+            <div class="song-list" id="song-list"></div>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
