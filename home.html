@@ -2,94 +2,379 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ChordKeeper</title>
   <link rel="stylesheet" href="css/styles.css" />
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-      color: #222;
+    :root {
+      --bg: #f8f9fa;
+      --fg: #222;
+      --primary: #3a71ff;
+      --accent: #ffc857;
+      --card: #fff;
+      --muted: #888;
+      --border: #eee;
+      --radius: 14px;
+      --font-main: 'Inter', Arial, sans-serif;
     }
-
+    [data-theme="dark"] {
+      --bg: #191a1c;
+      --fg: #f7f7f7;
+      --card: #232325;
+      --border: #2a2a2c;
+      --muted: #aaa;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
     header {
-      background-color: #333;
-      color: white;
-      padding: 1rem;
-      text-align: center;
+      background: var(--primary);
+      color: #fff;
+      padding: 1.2rem 0.5rem 0.8rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      border-bottom: 2px solid var(--accent);
+    }
+    header .brand {
+      font-weight: bold;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+    header .subtitle {
+      font-size: 1.05rem;
+      opacity: 0.93;
+    }
+    .top-bar {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 1.2rem 0 0.7rem 0;
+      padding: 0 0.2rem;
+    }
+    .search-bar {
+      flex: 1 1 200px;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.55rem 2.2rem 0.55rem 0.9rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 1rem;
+      transition: border 0.2s;
+    }
+    .search-bar input:focus { border: 1.5px solid var(--primary); outline: none; }
+    .search-bar .icon {
+      position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-size: 1.1rem;
+    }
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .controls select,
+    .controls button,
+    .controls .theme-toggle {
+      padding: 0.46rem 0.98rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--fg);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.16s, color 0.16s, border 0.2s;
+    }
+    .controls .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 1.12rem;
+      border: none;
+      background: transparent;
+      padding: 0.46rem 0.6rem;
+      margin-left: 0.4rem;
+    }
+    .controls .theme-toggle:hover { color: var(--primary);}
+    .controls .add-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .controls .add-btn:hover { background: #2457c5; }
+    .controls .view-toggle {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 0.46rem 0.9rem;
+    }
+    .controls .view-toggle.active,
+    .controls .view-toggle:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border: 1.5px solid var(--accent);
     }
 
     main {
-      max-width: 800px;
-      margin: auto;
-      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.2rem 0.8rem 3rem 0.8rem;
     }
-
-    h1 {
-      margin-top: 0;
+    .song-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
     }
-
-    #song-list {
-      margin: 1rem 0;
+    .list-view .song-list { grid-template-columns: 1fr; }
+    @media (max-width: 700px) {
+      .song-list { grid-template-columns: 1fr; gap: 1.1rem; }
+      header .brand { font-size: 1.5rem; }
     }
-
     .song-card {
-      background-color: white;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      padding: 1rem 1rem 0.6rem 1rem;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.14s, border 0.14s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      min-height: 180px;
+      position: relative;
     }
-
-    .song-card h2 {
-      margin: 0;
-      font-size: 1.2rem;
+    .song-card:hover { box-shadow: 0 5px 20px rgba(50,90,200,0.07);}
+    .song-title { font-size: 1.22rem; font-weight: 600; margin: 0;}
+    .song-meta {
+      font-size: 0.95rem;
+      color: var(--muted);
+      display: flex; gap: 0.9rem; flex-wrap: wrap;
     }
-
-    .song-card small {
-      color: #666;
+    .chord-preview {
+      font-family: "Menlo", monospace;
+      font-size: 1.06rem;
+      background: #f1f2f3;
+      border-radius: 7px;
+      margin-top: 0.4rem;
+      padding: 0.5rem 0.8rem;
+      color: #233;
+      overflow-x: auto;
     }
-
-    #add-song-btn {
-      display: inline-block;
-      margin: 1rem 0;
-      padding: 0.5rem 1rem;
-      background-color: #007bff;
-      color: white;
+    [data-theme="dark"] .chord-preview { background: #252729; color: #eee;}
+    .song-actions {
+      margin-top: 0.7rem;
+      display: flex; gap: 0.4rem;
+    }
+    .song-actions button {
+      background: none;
+      color: var(--primary);
       border: none;
-      border-radius: 6px;
       cursor: pointer;
       font-size: 1rem;
+      border-radius: 6px;
+      padding: 0.2rem 0.7rem;
+      transition: background 0.13s;
     }
-
-    @media (max-width: 600px) {
-      .song-card {
-        font-size: 0.95rem;
-      }
+    .song-actions button:hover { background: var(--accent); color: var(--fg);}
+    /* Modal styles */
+    .modal-backdrop {
+      display: none;
+      position: fixed; z-index: 200;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.36);
+      align-items: center; justify-content: center;
     }
+    .modal {
+      background: var(--card);
+      color: var(--fg);
+      padding: 2rem 1.3rem 1.1rem 1.3rem;
+      border-radius: var(--radius);
+      max-width: 380px; width: 95vw;
+      box-shadow: 0 7px 32px rgba(20,20,30,0.21);
+      border: 2px solid var(--primary);
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .modal h2 { margin: 0 0 0.3rem 0;}
+    .modal label { font-size: 1rem; font-weight: 500; }
+    .modal input, .modal select, .modal textarea {
+      width: 100%;
+      margin-top: 0.3rem;
+      margin-bottom: 0.85rem;
+      font-size: 1.03rem;
+      padding: 0.54rem 0.7rem;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .modal textarea { font-family: Menlo, monospace; min-height: 78px; resize: vertical;}
+    .modal .modal-actions {
+      display: flex; justify-content: flex-end; gap: 0.7rem;
+    }
+    .modal .btn {
+      border: none; border-radius: 7px;
+      padding: 0.5rem 1.1rem; font-size: 1rem;
+      cursor: pointer; font-weight: 500;
+      transition: background 0.15s;
+    }
+    .modal .btn-primary { background: var(--primary); color: #fff;}
+    .modal .btn-secondary { background: var(--accent); color: #222;}
+    .modal .btn-cancel { background: #d3d3d3; color: #333;}
+    .modal-backdrop.active { display: flex; }
   </style>
 </head>
-<body>
+<body data-theme="light">
   <header>
-    <h1>ChordKeeper</h1>
-    <p>Store, view, and transpose your favorite songs</p>
+    <div class="brand">ChordKeeper</div>
+    <div class="subtitle">Your personal chord chart library — piano-friendly, portable, and always in key.</div>
   </header>
-
   <main>
-    <button id="add-song-btn">+ Add New Song</button>
-
-    <section id="song-list">
-      <!-- Songs will be dynamically loaded here -->
-      <div class="song-card">
-        <h2>Amazing Grace</h2>
-        <small>Artist: Traditional · Key: C · Tempo: 80</small>
-        <pre>[C]Amazing [Am]grace, how [F]sweet the [C]sound</pre>
+    <!-- Top Controls Bar -->
+    <div class="top-bar">
+      <div class="search-bar">
+        <input type="search" id="search-input" placeholder="Search by title, artist, lyrics, chords..." autocomplete="off" />
+        <span class="icon">🔍</span>
       </div>
-    </section>
+      <div class="controls">
+        <select id="category-filter">
+          <option value="">All Categories</option>
+          <option value="Karaoke Night">Karaoke Night</option>
+          <option value="Practice Songs">Practice Songs</option>
+        </select>
+        <select id="tag-filter">
+          <option value="">All Tags</option>
+          <option value="Pop">Pop</option>
+          <option value="Ballad">Ballad</option>
+        </select>
+        <select id="sort-dropdown">
+          <option value="date">Sort by: Date Added</option>
+          <option value="title">Title (A-Z)</option>
+          <option value="artist">Artist</option>
+          <option value="key">Key</option>
+        </select>
+        <button class="view-toggle active" id="grid-view-btn" title="Grid View">⬛⬛</button>
+        <button class="view-toggle" id="list-view-btn" title="List View">☰</button>
+        <button class="theme-toggle" id="theme-toggle-btn" title="Toggle Dark/Light">
+          <span class="theme-icon">🌞</span>
+        </button>
+        <button class="add-btn" id="add-song-btn">+ Add New Song</button>
+      </div>
+    </div>
+    <!-- Song List -->
+    <div class="song-list" id="song-list">
+      <!-- Example Song Card -->
+      <div class="song-card">
+        <div class="song-title">Amazing Grace</div>
+        <div class="song-meta">
+          <span>Artist: Traditional</span>
+          <span>Key: C</span>
+          <span>Tempo: 80 bpm</span>
+          <span>Tags: Ballad</span>
+        </div>
+        <div class="chord-preview">
+[C]Amazing [Am]grace, how [F]sweet the [C]sound<br>
+That [C]saved a [G]wretch like [C]me
+        </div>
+        <div class="song-actions">
+          <button title="View/Transpose">View</button>
+          <button title="Edit">Edit</button>
+          <button title="Delete">Delete</button>
+        </div>
+      </div>
+      <!-- More cards dynamically inserted here -->
+    </div>
   </main>
+  <!-- Add/Edit Song Modal (hidden by default) -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <form class="modal" id="song-modal">
+      <h2 id="modal-title">Add New Song</h2>
+      <label>Title <input type="text" name="title" required /></label>
+      <label>Artist <input type="text" name="artist" required /></label>
+      <label>Original Key <input type="text" name="original_key" placeholder="e.g. C, Bb, F#m" /></label>
+      <label>Tempo <input type="number" name="tempo" min="1" max="350" placeholder="bpm" /></label>
+      <label>Genre <input type="text" name="genre" /></label>
+      <label>Category
+        <select name="category">
+          <option value="Karaoke Night">Karaoke Night</option>
+          <option value="Practice Songs">Practice Songs</option>
+          <option value="Uncategorized">Uncategorized</option>
+        </select>
+      </label>
+      <label>Tags <input type="text" name="tags" placeholder="comma, separated, tags" /></label>
+      <label>Notes <textarea name="notes" placeholder="Personal notes"></textarea></label>
+      <label>Chord Chart <textarea name="content" required placeholder="[C]Amazing [Am]grace, how [F]sweet..."></textarea></label>
+      <div class="modal-actions">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn btn-cancel" type="button" id="cancel-modal-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Light/Dark Theme Toggle
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    themeToggleBtn.addEventListener('click', () => {
+      const body = document.body;
+      const currTheme = body.getAttribute('data-theme');
+      if (currTheme === 'light') {
+        body.setAttribute('data-theme', 'dark');
+        themeToggleBtn.querySelector('.theme-icon').textContent = '🌙';
+      } else {
+        body.setAttribute('data-theme', 'light');
+        themeToggleBtn.querySelector('.theme-icon').textContent = '🌞';
+      }
+    });
 
+    // Modal Show/Hide Logic
+    const addBtn = document.getElementById('add-song-btn');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    addBtn.addEventListener('click', () => {
+      modalBackdrop.classList.add('active');
+      document.getElementById('modal-title').textContent = 'Add New Song';
+    });
+    cancelBtn.addEventListener('click', () => {
+      modalBackdrop.classList.remove('active');
+    });
+
+    // Grid/List View Toggle
+    const gridBtn = document.getElementById('grid-view-btn');
+    const listBtn = document.getElementById('list-view-btn');
+    const songList = document.getElementById('song-list');
+    gridBtn.addEventListener('click', () => {
+      gridBtn.classList.add('active');
+      listBtn.classList.remove('active');
+      document.body.classList.remove('list-view');
+    });
+    listBtn.addEventListener('click', () => {
+      listBtn.classList.add('active');
+      gridBtn.classList.remove('active');
+      document.body.classList.add('list-view');
+    });
+
+    // Close modal with ESC key
+    window.addEventListener('keydown', e => {
+      if (e.key === "Escape") modalBackdrop.classList.remove('active');
+    });
+
+    // Prevent modal closing when clicking inside modal
+    modalBackdrop.addEventListener('mousedown', e => {
+      if (e.target === modalBackdrop) modalBackdrop.classList.remove('active');
+    });
+  </script>
   <script src="js/app.js"></script>
 </body>
 </html>
