@@ -11,6 +11,10 @@ const transposer = new TranspositionEngine();
 
 // Middleware
 app.use(express.json({ limit: '10mb' })); // Increased limit for import
+// Serve main page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS headers for development
