@@ -297,6 +297,24 @@ That [C]saved a [G]wretch like [C]me
       </div>
       <!-- More cards dynamically inserted here -->
     </div>
+    <!-- Song Display (hidden by default) -->
+    <div id="song-display" style="display: none;">
+      <div class="song-display-header">
+        <button id="back-to-grid">← Back to Songs</button>
+        <h2 id="display-title"></h2>
+        <p id="display-artist"></p>
+      </div>
+      <div class="transpose-controls">
+        <button id="transpose-down">-</button>
+        <span id="current-key">C</span>
+        <button id="transpose-up">+</button>
+      </div>
+      <div class="song-actions">
+        <button id="toggle-chords">Toggle Chords</button>
+        <button id="edit-song">Edit</button>
+      </div>
+      <div id="song-content"></div>
+    </div>
   </main>
   <!-- Add/Edit Song Modal (hidden by default) -->
   <div class="modal-backdrop" id="modal-backdrop">
