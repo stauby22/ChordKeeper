@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { ChordKeeperDB } = require('./database');
 const { UltimateGuitarImporter } = require('./importers');
-const { TranspositionEngine } = require('./transposition');
+const { TranspositionEngine } = require('./transposition.js');
 
 const app = express();
 const db = new ChordKeeperDB(path.join(__dirname, 'chordkeeper.db'));
