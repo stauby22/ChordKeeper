@@ -17,6 +17,41 @@ class ChordKeeperDB {
 
     // Create tables
     this.db.exec(`
+      -- Artists table
+      CREATE TABLE IF NOT EXISTS artists (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+
+      -- Songs table
+      CREATE TABLE IF NOT EXISTS songs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        artist TEXT,
+        artist_id INTEGER DEFAULT 1,
+        key_signature TEXT DEFAULT 'C',
+        tempo INTEGER,
+        genre TEXT,
+        category TEXT DEFAULT 'uncategorized',
+        chord_data TEXT DEFAULT '[]',
+        lyrics TEXT NOT NULL,
+        notes TEXT,
+        tags TEXT,
+        play_count INTEGER DEFAULT 0,
+        is_favorite INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (artist_id) REFERENCES artists(id)
+      );
+
+      -- Full-text search table
+      CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(
+        title, artist, lyrics, notes,
+        content=songs,
+        content_rowid=id
+      );
+
       -- Triggers to keep FTS in sync
       CREATE TRIGGER IF NOT EXISTS songs_ai AFTER INSERT ON songs BEGIN
         INSERT INTO songs_fts(rowid, title, artist, lyrics, notes)
