@@ -235,6 +235,17 @@
     .modal .btn-secondary { background: var(--accent); color: #222;}
     .modal .btn-cancel { background: #d3d3d3; color: #333;}
     .modal-backdrop.active { display: flex; }
+    /* Song display styles */
+    .song-display { display: none; }
+    .song-header { padding: 1rem 0.8rem; border-bottom: 1px solid var(--border); }
+    .song-header-title { margin: 0; font-size: 1.5rem; }
+    .song-header-artist { margin: 0.3rem 0 0 0; color: var(--muted); }
+    .song-controls { display: flex; gap: 0.5rem; margin-top: 0.8rem; align-items: center; }
+    .transpose-controls { display: flex; gap: 0.3rem; align-items: center; }
+    .key-display { padding: 0 0.6rem; font-weight: bold; }
+    .song-body { padding: 1rem; font-family: Menlo, monospace; line-height: 1.8em; }
+    .song-line { position: relative; }
+    .chord { position: absolute; top: -1.4em; color: var(--primary); font-weight: bold; }
   </style>
 </head>
 <body data-theme="light">
@@ -296,6 +307,24 @@ That [C]saved a [G]wretch like [C]me
         </div>
       </div>
       <!-- More cards dynamically inserted here -->
+    </div>
+    <!-- Song Display (hidden by default) -->
+    <div class="song-display" id="song-display">
+      <div class="song-header">
+        <h2 class="song-header-title" id="display-title"></h2>
+        <p class="song-header-artist" id="display-artist"></p>
+        <div class="song-controls">
+          <div class="transpose-controls">
+            <button id="transpose-down">♭</button>
+            <div class="key-display" id="current-key">C</div>
+            <button id="transpose-up">♯</button>
+          </div>
+          <button id="toggle-chords">Toggle Chords</button>
+          <button id="edit-song">Edit</button>
+          <button id="back-to-grid">Back</button>
+        </div>
+      </div>
+      <div class="song-body" id="song-content"></div>
     </div>
   </main>
   <!-- Add/Edit Song Modal (hidden by default) -->
@@ -371,10 +400,11 @@ That [C]saved a [G]wretch like [C]me
     });
 
     // Prevent modal closing when clicking inside modal
-    modalBackdrop.addEventListener('mousedown', e => {
+  modalBackdrop.addEventListener('mousedown', e => {
       if (e.target === modalBackdrop) modalBackdrop.classList.remove('active');
     });
   </script>
+  <div class="toast" id="toast"></div>
   <script src="js/app.js"></script>
 </body>
 </html>
